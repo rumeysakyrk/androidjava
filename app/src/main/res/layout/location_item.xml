@@ -7,6 +7,11 @@
         android:id="@+id/location_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button Text" />
+        android:text="Button Text"
+        android:textColor="@color/white"
+        android:shadowColor="@color/yellow"
+        android:elevation="4dp" />
+
+
 
 </LinearLayout>

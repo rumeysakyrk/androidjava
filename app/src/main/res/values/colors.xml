@@ -7,4 +7,13 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="default_color">#F1857D</color>
+    <color name="selected_color">#80B1AD</color>
+    <color name="original_button_color">#F5776E</color>
+    <color name="clicked_button_color">#85F3E2</color>
+    <color name="green">#9FF096</color>
+    <color name="gray">#7D817E</color>
+    <color name="red">#E79E99</color>
+    <color name="tail">#C3F5C7C3</color>
+    <color name="yellow">#FFFF00</color>
 </resources>

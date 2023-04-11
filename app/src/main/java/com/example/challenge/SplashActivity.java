@@ -32,12 +32,12 @@ public class SplashActivity extends AppCompatActivity {
         TextView welcomeTextView = findViewById(R.id.welcome_text_view);
 
         if (isFirstTime) {
-            welcomeTextView.setText("Welcome");
+            welcomeTextView.setText("Welcome!");
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean("isFirstTime", false);
             editor.apply();
         } else {
-            welcomeTextView.setText("Hello");
+            welcomeTextView.setText("Hello!");
         }
     }
 }

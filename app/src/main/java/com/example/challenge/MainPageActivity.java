@@ -1,14 +1,9 @@
 package com.example.challenge;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import org.json.JSONArray;
@@ -21,7 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import com.example.challenge.CharacterAdapter;
+
 
 public class MainPageActivity extends AppCompatActivity implements LocationAdapter.LocationAdapterListener{
 
@@ -34,8 +29,9 @@ public class MainPageActivity extends AppCompatActivity implements LocationAdapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainpage);
-
-
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recycler_view = findViewById(R.id.recycler_view);
 
@@ -43,13 +39,6 @@ public class MainPageActivity extends AppCompatActivity implements LocationAdapt
 
         locationAdapter = new LocationAdapter(this,this);
         recycler_view.setAdapter(locationAdapter);
-
-        // ActionBar background color
-        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#FF00FF00"));
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setBackgroundDrawable(colorDrawable);
-        }
 
         new GetLocationsTask().execute();
         vertical_recycler_view = findViewById(R.id.vertical_recycler_view);
@@ -60,9 +49,8 @@ public class MainPageActivity extends AppCompatActivity implements LocationAdapt
 
     @Override
     public void onLocationSelected(String location) {
-        characterAdapter.clearCharacters();
-        // Seçilen lokasyona ait karakterler listeye eklenir
-        characterAdapter.notifyDataSetChanged();
+        // Seçilen lokasyona ait karakterler listeye eklendi.
+        characterAdapter.filterCharacters(location);
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -212,14 +200,18 @@ public class MainPageActivity extends AppCompatActivity implements LocationAdapt
                     String name = characterObject.getString("name");
                     String gender = characterObject.getString("gender");
                     String imageUrl = characterObject.getString("image");
+                    String locationName = characterObject.getJSONObject("location").getString("name");
 
-                    Character character = new Character(id, name, gender, imageUrl);
+                    Character character = new Character(id, name, gender, imageUrl, locationName);
                     characters.add(character);
+                    for (Character item:characters
+                    ) {
+                        System.out.println(item.getLocation());
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
             return characters;
         }
     }

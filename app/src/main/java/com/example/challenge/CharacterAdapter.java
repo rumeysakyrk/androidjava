@@ -14,9 +14,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder> {
     private List<Character> characters;
+    private List<Character> characters_org;
     private Context context;
 
     public CharacterAdapter(Context context) {
@@ -33,6 +35,19 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
         notifyDataSetChanged();
     }
 
+    public void filterCharacters(String location) {
+        if(characters_org == null){
+            characters_org=characters;
+        }
+        List<Character> filteredCharacters = new ArrayList<>();
+        for (Character character : characters_org) {
+            if (character.getLocation().equals(location)) {
+                filteredCharacters.add(character);
+            }
+        }
+        characters = filteredCharacters;
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @Override
@@ -73,4 +88,3 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
         }
     }
 }
-
