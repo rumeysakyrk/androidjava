@@ -48,16 +48,16 @@ public class MainPageActivity extends AppCompatActivity implements LocationAdapt
     }
 
     @Override
-    public void onLocationSelected(String location) {
+    public void onLocationSelected(Location location) {
         // Seçilen lokasyona ait karakterler listeye eklendi.
         characterAdapter.filterCharacters(location);
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class GetLocationsTask extends AsyncTask<Void, Void, List<String>>  {
+    private class GetLocationsTask extends AsyncTask<Void, Void, List<Location>>  {
 
         @Override
-        protected List<String> doInBackground(Void... voids) {
+        protected List<Location> doInBackground(Void... voids) {
             HttpURLConnection conn = null;
             try {
                 URL url = new URL("https://rickandmortyapi.com/api/location");
@@ -87,48 +87,54 @@ public class MainPageActivity extends AppCompatActivity implements LocationAdapt
                     conn.disconnect();
                 }
             }
-
             return null;
-
-
-
         }
 
         @Override
-        protected void onPostExecute(List<String> locationNames) {
+        protected void onPostExecute(List<Location> locationNames) {
             super.onPostExecute(locationNames);
             if (locationNames == null) {
                 locationNames = new ArrayList<>(); // Null yerine boş bir liste atıyoruz.
             }
-            locationAdapter.setLocationNames((ArrayList<String>) locationNames);
+            locationAdapter.setLocations((ArrayList<Location>) locationNames);
+            String locationUrl = "https://rickandmortyapi.com/api/character";
 
-            String selectedLocation = locationAdapter.getSelectedLocation();
-
-            String locationUrl;
-            if (selectedLocation != null) {
-                locationUrl = "https://rickandmortyapi.com/api/character?location=" + selectedLocation;
-            } else {
-                locationUrl = "https://rickandmortyapi.com/api/character";
-            }
             new GetCharactersTask(locationUrl).execute();
         }
 
-        private List<String> getLocationNamesFromResponse(String response) {
-            List<String> locationNames = new ArrayList<>();
+        private List<Location> getLocationNamesFromResponse(String response) {
+            List<Location> locations = new ArrayList<>();
             try {
                 JSONObject jsonObject = new JSONObject(response);
                 JSONArray jsonArray = jsonObject.getJSONArray("results");
 
                 for (int i = 0; i < jsonArray.length() && i < 20; i++) {
+                    Location locationInstance = new Location();
+                    locationInstance.residentIds = new ArrayList<>();
                     JSONObject locationObject = jsonArray.getJSONObject(i);
-                    String name = locationObject.getString("name");
-                    locationNames.add(name);
+                    locationInstance.locationName = locationObject.getString("name");
+                    JSONArray residentUrls = locationObject.getJSONArray("residents");
+                    for (int j = 0; j < residentUrls.length(); j++) {
+                        try {
+                            locationInstance.residentIds.add(Integer.parseInt(residentUrls.getString(j).split("character/")[1]));
+                        } catch (JSONException e) {e.printStackTrace();}
+                    }
+                    locations.add(locationInstance);
+
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            for (Location l:locations) {
+                System.out.print(l.locationName);
+                System.out.print("-");
+                for (Integer i:l.residentIds ) {
+                    System.out.print(i);
+                }
+                System.out.println();
+            }
 
-            return locationNames;
+            return locations;
         }
 
     }
@@ -202,7 +208,10 @@ public class MainPageActivity extends AppCompatActivity implements LocationAdapt
                     String imageUrl = characterObject.getString("image");
                     String locationName = characterObject.getJSONObject("location").getString("name");
 
-                    Character character = new Character(id, name, gender, imageUrl, locationName);
+                    String status= characterObject.getString("status");
+                    String origin=characterObject.getJSONObject("origin").getString("name");
+                    String species=characterObject.getString("species");
+                    Character character = new Character(id, status, species, origin,name, gender, imageUrl,locationName);
                     characters.add(character);
                     for (Character item:characters
                     ) {

@@ -13,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.LocationViewHolder> {
-    private ArrayList<String> locationNames = new ArrayList<>();
+    private ArrayList<Location> locations = new ArrayList<>();
     private Context context;
-    private String selectedLocation;
+    private Location selectedLocation;
     private int selectedPosition = -1;
 
     public interface LocationAdapterListener {
-        void onLocationSelected(String location);
+        void onLocationSelected(Location location);
     }
 
     private LocationAdapterListener listener;
@@ -33,20 +33,20 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
     }
 
 
-    public void setLocationNames(ArrayList<String> locationNames) {
-        if (locationNames != null) {
-            this.locationNames = locationNames;
+    public void setLocations(ArrayList<Location> locations) {
+        if (locations != null) {
+            this.locations = locations;
             notifyDataSetChanged();
         }
     }
 
-    public String getSelectedLocation() {
+    public Location getSelectedLocation() {
         System.out.println(listener);
         return selectedLocation;
     }
 
 
-    public void setSelectedLocation(String selectedLocation) {
+    public void setSelectedLocation(Location selectedLocation) {
         this.selectedLocation = selectedLocation;
     }
     @NonNull
@@ -66,8 +66,9 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
 
     @Override
     public void onBindViewHolder(@NonNull LocationViewHolder holder, int position) {
-        String name = locationNames.get(position);
+        String name = locations.get(position).locationName;
         holder.locationButton.setText(name);
+
 
         // Set the background color of the button based on its position
         if (selectedPosition == position) {
@@ -79,7 +80,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         holder.locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String selectedLocation = locationNames.get(holder.getAdapterPosition());
+                Location selectedLocation = locations.get(holder.getAdapterPosition());
                 setSelectedLocation(selectedLocation);
                 listener.onLocationSelected(selectedLocation);
                 int previousSelectedPosition = selectedPosition;
@@ -96,7 +97,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
 
     @Override
     public int getItemCount() {
-        return locationNames.size();
+        return locations.size();
     }
 
     public static class LocationViewHolder extends RecyclerView.ViewHolder {
