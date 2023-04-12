@@ -2,102 +2,251 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fontFamily="sans-serif">
+    android:fontFamily="@font/avenir">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:orientation="vertical">
 
-        <!-- Character name -->
-        <TextView
-            android:id="@+id/character_name"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/clicked_button_color"
+            android:elevation="4dp"
+            android:theme="?attr/actionBarTheme">
+
+            <TextView
+                android:id="@+id/character_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/avenir"
+                android:text="Character Name"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:text="Character Name"/>
+            android:orientation="vertical"
+            android:padding="20dp">
 
-        <!-- Character image -->
-        <ImageView
-            android:id="@+id/character_image"
-            android:layout_width="275dp"
-            android:layout_height="275dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="50dp"
-            android:layout_gravity="center_horizontal"
-            android:scaleType="centerCrop" />
+            <!-- Character name -->
 
-        <!-- Status -->
-        <TextView
-            android:id="@+id/character_status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"
-            android:text="Status: "/>
 
-        <!-- Species -->
-        <TextView
-            android:id="@+id/character_species"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"
-            android:text="Species: "/>
+            <!-- Character image -->
+            <ImageView
+                android:id="@+id/character_image"
+                android:layout_width="275dp"
+                android:layout_height="275dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="50dp"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="centerCrop" />
+
+            <!-- Status -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/character_status_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/avenir"
+                    android:text="Status: " />
+
+                <TextView
+                    android:id="@+id/character_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textStyle="normal"
+                    android:fontFamily="@font/avenir" />
+            </LinearLayout>
+
+            <!-- Species -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/character_species_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/avenir"
+                    android:text="Species: " />
+
+                <TextView
+                    android:id="@+id/character_species"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textStyle="normal"
+                    android:fontFamily="@font/avenir" />
+            </LinearLayout>
 
         <!-- Gender -->
-        <TextView
-            android:id="@+id/character_gender"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"
-            android:text="Gender: "/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/gender_species_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/avenir"
+                    android:text="Gender: " />
+
+                <TextView
+                    android:id="@+id/character_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textStyle="normal"
+                    android:fontFamily="@font/avenir" />
+            </LinearLayout>
 
         <!-- Origin -->
-        <TextView
-            android:id="@+id/character_origin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"
-            android:text="Origin: "/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/origin_species_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/avenir"
+                    android:text="Origin: " />
+
+                <TextView
+                    android:id="@+id/character_origin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textStyle="normal"
+                    android:fontFamily="@font/avenir" />
+            </LinearLayout>
 
         <!-- Location -->
-        <TextView
-            android:id="@+id/location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"
-            android:text="Location: "/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/location_species_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/avenir"
+                    android:text="Location: " />
+
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textStyle="normal"
+                    android:fontFamily="@font/avenir" />
+            </LinearLayout>
 
         <!-- Episodes -->
-        <TextView
-            android:id="@+id/episodes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"
-            android:text="Episodes: "/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/episode_species_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/avenir"
+                    android:text="Episodes: " />
+
+                <TextView
+                    android:id="@+id/episodes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textStyle="normal"
+                    android:fontFamily="@font/avenir" />
+            </LinearLayout>
 
         <!-- Created At -->
-        <TextView
-            android:id="@+id/createdAt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"
-            android:text="Created At: "/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
 
-    </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/created_species_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/avenir"
+                        android:text="Created at " />
+
+                    <TextView
+                        android:id="@+id/at_api_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/avenir"
+                        android:text="(at API):"
+                        android:layout_below="@id/created_species_label"
+                        android:layout_marginLeft="8dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/createdAt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textStyle="normal"
+                    android:fontFamily="@font/avenir"
+                    android:layout_gravity="end"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+</LinearLayout>
 </ScrollView>
+

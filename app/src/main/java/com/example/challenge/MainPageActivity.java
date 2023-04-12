@@ -211,12 +211,18 @@ public class MainPageActivity extends AppCompatActivity implements LocationAdapt
                     String status= characterObject.getString("status");
                     String origin=characterObject.getJSONObject("origin").getString("name");
                     String species=characterObject.getString("species");
-                    Character character = new Character(id, status, species, origin,name, gender, imageUrl,locationName);
-                    characters.add(character);
-                    for (Character item:characters
-                    ) {
-                        System.out.println(item.getLocation());
+                    String created=characterObject.getString("created");
+
+                    List<Integer> episodeIds=new ArrayList<>();
+                    JSONArray episodeUrls = characterObject.getJSONArray("episode");
+                    for (int j = 0; j < episodeUrls.length(); j++) {
+                        try {
+                            episodeIds.add(Integer.parseInt(episodeUrls.getString(j).split("episode/")[1]));
+                        } catch (JSONException e) {e.printStackTrace();}
                     }
+
+                    Character character = new Character(id, status, species, origin,name, gender, imageUrl,locationName,episodeIds,created);
+                    characters.add(character);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

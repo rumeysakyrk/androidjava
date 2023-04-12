@@ -13,9 +13,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Challenge"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@xml/actions" />
+
         <activity
             android:name=".DetailPageActivity"
-            android:exported="false" />
+            android:parentActivityName=".MainPageActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainPageActivity" />
+        </activity>
         <activity
             android:name=".MainPageActivity"
             android:exported="false"

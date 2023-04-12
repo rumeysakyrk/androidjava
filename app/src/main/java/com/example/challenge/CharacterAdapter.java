@@ -67,8 +67,6 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
                     URL url = new URL(locationUrl);
                     conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("GET");
-                    System.out.println("----------");
-                    System.out.println(conn.getResponseCode());
                     if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                         BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                         StringBuilder response = new StringBuilder();
@@ -118,12 +116,19 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
                 String status= characterObject.getString("status");
                 String origin=characterObject.getJSONObject("origin").getString("name");
                 String species=characterObject.getString("species");
-                Character character = new Character(id, status, species, origin,name, gender, imageUrl,locationName);
-                characters.add(character);
-                for (Character item:characters
-                ) {
-                    System.out.println(item.getLocation());
+                String created=characterObject.getString("created");
+
+
+                List<Integer> episodeIds=new ArrayList<>();
+                JSONArray episodeUrls = characterObject.getJSONArray("episode");
+                for (int j = 0; j < episodeUrls.length(); j++) {
+                    try {
+                        episodeIds.add(Integer.parseInt(episodeUrls.getString(j).split("episode/")[1]));
+                    } catch (JSONException e) {e.printStackTrace();}
                 }
+
+                Character character = new Character(id, status, species, origin,name, gender, imageUrl,locationName,episodeIds,created);
+                characters.add(character);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -165,6 +170,8 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
         public TextView originTextView;
         public TextView nameTextView;
         public TextView genderTextView;
+        public TextView locationTextView;
+        public TextView createdTextView;
 
         public CharacterViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -174,6 +181,8 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
             statusTextView=itemView.findViewById(R.id.character_status);
             speciesTextView=itemView.findViewById(R.id.character_species);
             originTextView=itemView.findViewById(R.id.character_origin);
+            locationTextView=itemView.findViewById(R.id.location);
+            createdTextView=itemView.findViewById(R.id.createdAt);
             itemView.setOnClickListener(this);
         }
 
@@ -184,10 +193,14 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
             Intent intent = new Intent(context, DetailPageActivity.class);
             intent.putExtra("character_id", character.getId());
             intent.putExtra("name", character.getName());
-            intent.putExtra("gender", "Gender: " + character.getGender());
-            intent.putExtra("origin", "Origin: " + character.getOrigin());
-            intent.putExtra("status", "Status: " + character.getStatus());
-            intent.putExtra("species", "Species: " + character.getSpecies());
+            intent.putExtra("gender", character.getGender());
+            intent.putExtra("origin", character.getOrigin());
+            intent.putExtra("status", character.getStatus());
+            intent.putExtra("species", character.getSpecies());
+            intent.putExtra("episode", character.getEpisodeIds());
+            intent.putExtra("location", character.getLocation());
+            intent.putExtra("created", character.getCreated());
+
             intent.putExtra("imageUrl", character.getImageUrl());
             context.startActivity(intent);
         }
