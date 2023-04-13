@@ -45,6 +45,8 @@ public class MainPageActivity extends AppCompatActivity implements LocationAdapt
 
         characterAdapter = new CharacterAdapter(this);
         vertical_recycler_view.setAdapter(characterAdapter);
+
+
     }
 
     @Override
@@ -94,13 +96,17 @@ public class MainPageActivity extends AppCompatActivity implements LocationAdapt
         protected void onPostExecute(List<Location> locationNames) {
             super.onPostExecute(locationNames);
             if (locationNames == null) {
-                locationNames = new ArrayList<>(); // Null yerine boş bir liste atıyoruz.
+                locationNames = new ArrayList<>();
             }
             locationAdapter.setLocations((ArrayList<Location>) locationNames);
-            String locationUrl = "https://rickandmortyapi.com/api/character";
-
-            new GetCharactersTask(locationUrl).execute();
+            for (Location location : locationNames) {
+                if (location.locationName.equals("Earth (C-137)")) {
+                    onLocationSelected(location);
+                    break;
+                }
+            }
         }
+
 
         private List<Location> getLocationNamesFromResponse(String response) {
             List<Location> locations = new ArrayList<>();
@@ -125,109 +131,9 @@ public class MainPageActivity extends AppCompatActivity implements LocationAdapt
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            for (Location l:locations) {
-                System.out.print(l.locationName);
-                System.out.print("-");
-                for (Integer i:l.residentIds ) {
-                    System.out.print(i);
-                }
-                System.out.println();
-            }
-
             return locations;
         }
 
     }
 
-
-    private class GetCharactersTask extends AsyncTask<Void, Void, List<Character>> {
-        private String locationUrl;
-
-        public GetCharactersTask(String locationUrl) {
-            this.locationUrl = locationUrl;
-        }
-
-        @Override
-        protected List<Character> doInBackground(Void... voids) {
-            HttpURLConnection conn = null;
-            try {
-                String locationUrl = "https://rickandmortyapi.com/api/character";
-                if (locationAdapter.getSelectedLocation() != null) {
-                    locationUrl += "?location=" + locationAdapter.getSelectedLocation();
-                }
-                URL url = new URL(locationUrl);
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-
-                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    StringBuilder response = new StringBuilder();
-                    String line;
-
-                    while ((line = reader.readLine()) != null) {
-                        response.append(line);
-                    }
-
-                    reader.close();
-                    conn.disconnect();
-
-                    return getCharactersFromResponse(response.toString());
-                }
-
-                conn.disconnect();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (conn != null) {
-                    conn.disconnect();
-                }
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(List<Character> characters) {
-            super.onPostExecute(characters);
-            if (characterAdapter != null) {
-                characterAdapter.setCharacters(characters);
-            }
-        }
-
-        private List<Character> getCharactersFromResponse(String response) {
-            List<Character> characters = new ArrayList<>();
-            try {
-                JSONObject jsonObject = new JSONObject(response);
-                JSONArray jsonArray = jsonObject.getJSONArray("results");
-
-                for (int i = 0; i < jsonArray.length() && i < 20; i++) {
-                    JSONObject characterObject = jsonArray.getJSONObject(i);
-                    int id = characterObject.getInt("id");
-                    String name = characterObject.getString("name");
-                    String gender = characterObject.getString("gender");
-                    String imageUrl = characterObject.getString("image");
-                    String locationName = characterObject.getJSONObject("location").getString("name");
-
-                    String status= characterObject.getString("status");
-                    String origin=characterObject.getJSONObject("origin").getString("name");
-                    String species=characterObject.getString("species");
-                    String created=characterObject.getString("created");
-
-                    List<Integer> episodeIds=new ArrayList<>();
-                    JSONArray episodeUrls = characterObject.getJSONArray("episode");
-                    for (int j = 0; j < episodeUrls.length(); j++) {
-                        try {
-                            episodeIds.add(Integer.parseInt(episodeUrls.getString(j).split("episode/")[1]));
-                        } catch (JSONException e) {e.printStackTrace();}
-                    }
-
-                    Character character = new Character(id, status, species, origin,name, gender, imageUrl,locationName,episodeIds,created);
-                    characters.add(character);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return characters;
-        }
-    }
 }

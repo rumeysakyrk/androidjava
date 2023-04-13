@@ -1,6 +1,6 @@
 package com.example.challenge;
 
-import android.annotation.SuppressLint;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -26,25 +26,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder> {
     private static List<Character> characters;
-    private List<Character> characters_org;
     private static Context context;
 
     public CharacterAdapter(Context context) {
         this.context = context;
         this.characters = new ArrayList<>();
-    }
-
-    public void setCharacters(List<Character> characters) {
-        if (characters == null) {
-            this.characters = new ArrayList<>();
-        } else {
-            this.characters = characters;
-        }
-        notifyDataSetChanged();
     }
 
     public void filterCharacters(Location location) {
@@ -62,8 +51,6 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
                     for (Integer id : location.residentIds) {
                         locationUrl += id + ",";
                     }
-
-                    System.out.println(locationUrl);
                     URL url = new URL(locationUrl);
                     conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("GET");
@@ -112,13 +99,10 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
                 String gender = characterObject.getString("gender");
                 String imageUrl = characterObject.getString("image");
                 String locationName = characterObject.getJSONObject("location").getString("name");
-
                 String status= characterObject.getString("status");
                 String origin=characterObject.getJSONObject("origin").getString("name");
                 String species=characterObject.getString("species");
                 String created=characterObject.getString("created");
-
-
                 List<Integer> episodeIds=new ArrayList<>();
                 JSONArray episodeUrls = characterObject.getJSONArray("episode");
                 for (int j = 0; j < episodeUrls.length(); j++) {
@@ -148,18 +132,21 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
     public void onBindViewHolder(@NonNull CharacterViewHolder holder, int position) {
         Character character = characters.get(position);
         holder.nameTextView.setText(character.getName());
-        holder.genderTextView.setText(character.getGender());
+        ImageView genderIcon = holder.itemView.findViewById(R.id.character_icon);
+        if (character.getGender().equals("Male")) {
+            genderIcon.setImageResource(R.drawable.male);
+        } else if (character.getGender().equals("Female")) {
+            genderIcon.setImageResource(R.drawable.female);
+        } else {
+            genderIcon.setImageResource(R.drawable.unknown);
+        }
+
         Picasso.get().load(character.getImageUrl()).into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
         return characters.size();
-    }
-
-    public void clearCharacters() {
-        characters.clear();
-        notifyDataSetChanged();
     }
 
 
@@ -200,7 +187,6 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
             intent.putExtra("episode", character.getEpisodeIds());
             intent.putExtra("location", character.getLocation());
             intent.putExtra("created", character.getCreated());
-
             intent.putExtra("imageUrl", character.getImageUrl());
             context.startActivity(intent);
         }

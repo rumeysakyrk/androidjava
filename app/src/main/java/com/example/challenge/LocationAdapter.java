@@ -16,7 +16,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
     private ArrayList<Location> locations = new ArrayList<>();
     private Context context;
     private Location selectedLocation;
-    private int selectedPosition = -1;
+    private int selectedPosition = 0;
 
     public interface LocationAdapterListener {
         void onLocationSelected(Location location);
