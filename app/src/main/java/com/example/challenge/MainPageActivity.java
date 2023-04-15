@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.widget.ProgressBar;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +43,22 @@ public class MainPageActivity extends AppCompatActivity implements LocationAdapt
         locationAdapter = new LocationAdapter(this,this);
         recycler_view.setAdapter(locationAdapter);
 
+        recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (layoutManager != null) {
+                    int lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition();
+
+                    if (lastVisibleItem == locationAdapter.getItemCount() - 1 && locationAdapter.getCurrentPage() < locationAdapter.getTotalPages()) {
+
+                        locationAdapter.loadNextPage();
+                    }
+                }
+            }
+        });
 
         vertical_recycler_view = findViewById(R.id.vertical_recycler_view);
 

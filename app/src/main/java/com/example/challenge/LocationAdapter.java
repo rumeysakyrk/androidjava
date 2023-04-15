@@ -29,18 +29,36 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
     private Context context;
     private Location selectedLocation;
     private int selectedPosition = 0;
+    private LocationAdapterListener listener;
+    private int currentPage = 1;
+    private int totalPages = 1;
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public int getTotalPages() {
+        return totalPages;
+    }
+
+    public void loadNextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            new GetLocationsTask().execute(currentPage);
+        }
+    }
     public interface LocationAdapterListener {
         void onLocationSelected(Location location);
 
     }
-    private LocationAdapterListener listener;
+
     public LocationAdapter(Context context, LocationAdapterListener listener) {
         this.context = context;
         if (listener == null) {
             throw new IllegalArgumentException("Listener cannot be null");
         }
         this.listener = listener;
-        new GetLocationsTask().execute();
+        new GetLocationsTask().execute(currentPage);
     }
     public void setLocations(ArrayList<Location> locations) {
         if (locations != null) {
@@ -49,7 +67,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         }
     }
     public Location getSelectedLocation() {
-        System.out.println(listener);
         return selectedLocation;
     }
     public void setSelectedLocation(Location selectedLocation) {
@@ -72,7 +89,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         String name = locations.get(position).locationName;
         holder.locationButton.setText(name);
 
-
         // Set the background color of the button based on its position
         if (selectedPosition == position) {
             holder.locationButton.setBackgroundColor(ContextCompat.getColor(context, R.color.teal_200));
@@ -94,6 +110,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
                 notifyItemChanged(selectedPosition);
             }
         });
+        if (position == locations.size() - 1) {
+            // RecyclerView'nin sonuna ulaşıldığında, yeni sayfayı yükle
+            currentPage++;
+            new GetLocationsTask().execute(currentPage);
+        }
     }
     @Override
     public int getItemCount() {
@@ -109,12 +130,13 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         }
     }
     @SuppressLint("StaticFieldLeak")
-    private class GetLocationsTask extends AsyncTask<Void, Void, List<Location>> {
+    private class GetLocationsTask extends AsyncTask<Integer, Void, List<Location>> {
         @Override
-        protected List<Location> doInBackground(Void... voids) {
+        protected List<Location> doInBackground(Integer... integers) {
             HttpURLConnection conn = null;
+            int pageNumber = integers[0];
             try {
-                URL url = new URL("https://rickandmortyapi.com/api/location");
+                URL url = new URL("https://rickandmortyapi.com/api/location?page=" + pageNumber);
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
 
@@ -149,7 +171,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             if (locationNames == null) {
                 locationNames = new ArrayList<>();
             }
-            setLocations((ArrayList<Location>) locationNames);
+            locations.addAll(locationNames);
+            notifyDataSetChanged();
             for (Location location : locationNames) {
                 if (location.locationName.equals("Earth (C-137)")) {
                     listener.onLocationSelected(location);

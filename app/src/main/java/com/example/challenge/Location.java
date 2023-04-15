@@ -7,4 +7,6 @@ public class Location{
     String locationName;
     List<Integer> residentIds;
 
+
+
 }
