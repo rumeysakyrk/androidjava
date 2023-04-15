@@ -229,7 +229,7 @@
                         android:textSize="22sp"
                         android:textStyle="bold"
                         android:fontFamily="@font/avenir"
-                        android:text="(at API):"
+                        android:text="(in API):"
                         android:layout_below="@id/created_species_label"
                         android:layout_marginLeft="8dp" />
                 </RelativeLayout>

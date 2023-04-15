@@ -40,7 +40,7 @@ public class MainPageActivity extends AppCompatActivity implements LocationAdapt
         locationAdapter = new LocationAdapter(this,this);
         recycler_view.setAdapter(locationAdapter);
 
-        new GetLocationsTask().execute();
+
         vertical_recycler_view = findViewById(R.id.vertical_recycler_view);
 
         characterAdapter = new CharacterAdapter(this);
@@ -55,85 +55,6 @@ public class MainPageActivity extends AppCompatActivity implements LocationAdapt
         characterAdapter.filterCharacters(location);
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class GetLocationsTask extends AsyncTask<Void, Void, List<Location>>  {
 
-        @Override
-        protected List<Location> doInBackground(Void... voids) {
-            HttpURLConnection conn = null;
-            try {
-                URL url = new URL("https://rickandmortyapi.com/api/location");
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-
-                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    StringBuilder response = new StringBuilder();
-                    String line;
-
-                    while ((line = reader.readLine()) != null) {
-                        response.append(line);
-                    }
-
-                    reader.close();
-                    conn.disconnect();
-
-                    return getLocationNamesFromResponse(response.toString());
-                }
-
-                conn.disconnect();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (conn != null) {
-                    conn.disconnect();
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(List<Location> locationNames) {
-            super.onPostExecute(locationNames);
-            if (locationNames == null) {
-                locationNames = new ArrayList<>();
-            }
-            locationAdapter.setLocations((ArrayList<Location>) locationNames);
-            for (Location location : locationNames) {
-                if (location.locationName.equals("Earth (C-137)")) {
-                    onLocationSelected(location);
-                    break;
-                }
-            }
-        }
-
-
-        private List<Location> getLocationNamesFromResponse(String response) {
-            List<Location> locations = new ArrayList<>();
-            try {
-                JSONObject jsonObject = new JSONObject(response);
-                JSONArray jsonArray = jsonObject.getJSONArray("results");
-
-                for (int i = 0; i < jsonArray.length() && i < 20; i++) {
-                    Location locationInstance = new Location();
-                    locationInstance.residentIds = new ArrayList<>();
-                    JSONObject locationObject = jsonArray.getJSONObject(i);
-                    locationInstance.locationName = locationObject.getString("name");
-                    JSONArray residentUrls = locationObject.getJSONArray("residents");
-                    for (int j = 0; j < residentUrls.length(); j++) {
-                        try {
-                            locationInstance.residentIds.add(Integer.parseInt(residentUrls.getString(j).split("character/")[1]));
-                        } catch (JSONException e) {e.printStackTrace();}
-                    }
-                    locations.add(locationInstance);
-
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return locations;
-        }
-
-    }
 
 }

@@ -3,14 +3,15 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/location_button"
+    <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button Text"
-        android:textColor="@color/white"
-        android:shadowColor="@color/yellow"
-        android:elevation="4dp" />
+        android:layout_gravity="center_horizontal"
+        android:indeterminate="true"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        />
 
 
 </LinearLayout>

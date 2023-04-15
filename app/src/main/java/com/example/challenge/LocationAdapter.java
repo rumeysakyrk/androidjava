@@ -1,6 +1,8 @@
 package com.example.challenge;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +12,17 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.LocationViewHolder> {
     private ArrayList<Location> locations = new ArrayList<>();
@@ -20,6 +32,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
 
     public interface LocationAdapterListener {
         void onLocationSelected(Location location);
+
     }
 
     private LocationAdapterListener listener;
@@ -30,6 +43,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             throw new IllegalArgumentException("Listener cannot be null");
         }
         this.listener = listener;
+        new GetLocationsTask().execute();
     }
 
 
@@ -107,5 +121,85 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             super(itemView);
             locationButton = itemView.findViewById(R.id.location_button);
         }
+    }
+    @SuppressLint("StaticFieldLeak")
+    private class GetLocationsTask extends AsyncTask<Void, Void, List<Location>> {
+
+        @Override
+        protected List<Location> doInBackground(Void... voids) {
+            HttpURLConnection conn = null;
+            try {
+                URL url = new URL("https://rickandmortyapi.com/api/location");
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+
+                    reader.close();
+                    conn.disconnect();
+
+                    return getLocationNamesFromResponse(response.toString());
+                }
+
+                conn.disconnect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (conn != null) {
+                    conn.disconnect();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<Location> locationNames) {
+            super.onPostExecute(locationNames);
+            if (locationNames == null) {
+                locationNames = new ArrayList<>();
+            }
+            setLocations((ArrayList<Location>) locationNames);
+            for (Location location : locationNames) {
+                if (location.locationName.equals("Earth (C-137)")) {
+                    listener.onLocationSelected(location);
+                    break;
+                }
+            }
+        }
+
+
+        private List<Location> getLocationNamesFromResponse(String response) {
+            List<Location> locations = new ArrayList<>();
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                JSONArray jsonArray = jsonObject.getJSONArray("results");
+
+                for (int i = 0; i < jsonArray.length() && i < 20; i++) {
+                    Location locationInstance = new Location();
+                    locationInstance.residentIds = new ArrayList<>();
+                    JSONObject locationObject = jsonArray.getJSONObject(i);
+                    locationInstance.locationName = locationObject.getString("name");
+                    JSONArray residentUrls = locationObject.getJSONArray("residents");
+                    for (int j = 0; j < residentUrls.length(); j++) {
+                        try {
+                            locationInstance.residentIds.add(Integer.parseInt(residentUrls.getString(j).split("character/")[1]));
+                        } catch (JSONException e) {e.printStackTrace();}
+                    }
+                    locations.add(locationInstance);
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return locations;
+        }
+
     }
 }
