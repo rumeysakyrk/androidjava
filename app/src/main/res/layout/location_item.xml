@@ -11,6 +11,4 @@
         android:textColor="@color/white"
         android:shadowColor="@color/yellow"
         android:elevation="4dp" />
-
-
 </LinearLayout>

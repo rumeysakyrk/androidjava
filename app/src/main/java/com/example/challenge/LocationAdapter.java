@@ -29,14 +29,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
     private Context context;
     private Location selectedLocation;
     private int selectedPosition = 0;
-
     public interface LocationAdapterListener {
         void onLocationSelected(Location location);
 
     }
-
     private LocationAdapterListener listener;
-
     public LocationAdapter(Context context, LocationAdapterListener listener) {
         this.context = context;
         if (listener == null) {
@@ -45,21 +42,16 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         this.listener = listener;
         new GetLocationsTask().execute();
     }
-
-
     public void setLocations(ArrayList<Location> locations) {
         if (locations != null) {
             this.locations = locations;
             notifyDataSetChanged();
         }
     }
-
     public Location getSelectedLocation() {
         System.out.println(listener);
         return selectedLocation;
     }
-
-
     public void setSelectedLocation(Location selectedLocation) {
         this.selectedLocation = selectedLocation;
     }
@@ -75,9 +67,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
 
         return viewHolder;
     }
-
-
-
     @Override
     public void onBindViewHolder(@NonNull LocationViewHolder holder, int position) {
         String name = locations.get(position).locationName;
@@ -106,9 +95,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             }
         });
     }
-
-
-
     @Override
     public int getItemCount() {
         return locations.size();
@@ -124,7 +110,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
     }
     @SuppressLint("StaticFieldLeak")
     private class GetLocationsTask extends AsyncTask<Void, Void, List<Location>> {
-
         @Override
         protected List<Location> doInBackground(Void... voids) {
             HttpURLConnection conn = null;
@@ -158,7 +143,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             }
             return null;
         }
-
         @Override
         protected void onPostExecute(List<Location> locationNames) {
             super.onPostExecute(locationNames);
@@ -173,7 +157,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
                 }
             }
         }
-
 
         private List<Location> getLocationNamesFromResponse(String response) {
             List<Location> locations = new ArrayList<>();

@@ -84,6 +84,8 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
                 notifyDataSetChanged();
             } else {
                 // Handle the case where the API request failed
+                CharacterAdapter.this.characters.clear();
+                notifyDataSetChanged();
             }
         }
     }
