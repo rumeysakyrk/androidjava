@@ -45,7 +45,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
     }
 
     public void loadNextPage() {
-        if (currentPage < totalPages) {
+        if (currentPage < totalPages && currentPage<=7) {
             currentPage++;
             new GetLocationsTask().execute(currentPage);
         }
@@ -116,10 +116,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             }
         });
         if (position == locations.size() - 1) {
-            // RecyclerView'nin sonuna ulaşıldığında, yeni sayfayı yükle
-            currentPage++;
-            new GetLocationsTask().execute(currentPage);
+            // RecyclerView'nin sonuna ulaşıldığında, yeni sayfayı yükle ve 1 saniye bekle
+                    currentPage++;
+                    new GetLocationsTask().execute(currentPage);
         }
+
     }
     @Override
     public int getItemCount() {
@@ -135,42 +136,41 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
+
     private class GetLocationsTask extends AsyncTask<Integer, Void, List<Location>> {
 
         @Override
         protected List<Location> doInBackground(Integer... integers) {
             HttpURLConnection conn = null;
-            int pageNumber = integers[0];
-            try {
-                URL url = new URL("https://rickandmortyapi.com/api/location?page=" + pageNumber);
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
+                try {
+                    URL url = new URL("https://rickandmortyapi.com/api/location?page=" + currentPage);
+                    conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
 
-                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    StringBuilder response = new StringBuilder();
-                    String line;
+                    if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                        StringBuilder response = new StringBuilder();
+                        String line;
 
-                    while ((line = reader.readLine()) != null) {
-                        response.append(line);
+                        while ((line = reader.readLine()) != null) {
+                            response.append(line);
+                        }
+
+                        reader.close();
+                        conn.disconnect();
+
+                        return getLocationNamesFromResponse(response.toString());
                     }
 
-                    reader.close();
                     conn.disconnect();
-
-                    return getLocationNamesFromResponse(response.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (conn != null) {
+                        conn.disconnect();
+                    }
                 }
-
-                conn.disconnect();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (conn != null) {
-                    conn.disconnect();
-                }
-            }
-            return null;
+                return null;
         }
         @Override
         protected void onPostExecute(List<Location> locationNames) {
@@ -180,17 +180,19 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             }
             locations.addAll(locationNames);
             notifyDataSetChanged();
-            progressBar.setVisibility(View.VISIBLE);
+            if(currentPage<=7){
+                progressBar.setVisibility(View.VISIBLE);
+            }
             if (currentPage == totalPages) {
                 progressBar.setVisibility(View.GONE);
             }
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                        progressBar.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
 
                 }
-            }, 1000);
+            }, 500);
 
             for (Location location : locationNames) {
                 if (location.locationName.equals("Earth (C-137)")) {

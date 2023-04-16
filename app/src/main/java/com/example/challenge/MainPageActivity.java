@@ -51,9 +51,7 @@ public class MainPageActivity extends AppCompatActivity implements LocationAdapt
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (layoutManager != null) {
                     int lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition();
-
                     if (lastVisibleItem == locationAdapter.getItemCount() - 1 && locationAdapter.getCurrentPage() < locationAdapter.getTotalPages()) {
-
                         locationAdapter.loadNextPage();
                     }
                 }

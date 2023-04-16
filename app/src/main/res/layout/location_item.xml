@@ -13,6 +13,4 @@
         android:visibility="visible"
         android:elevation="4dp" />
 
-
-
 </LinearLayout>
