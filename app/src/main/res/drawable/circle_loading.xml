@@ -1,22 +1,22 @@
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
-    <size
-        android:width="30dp"
-        android:height="30dp" />
-    <solid android:color="@android:color/transparent" />
-    <stroke
-        android:width="3dp"
-        android:color="@color/black" />
-    <rotate
-        android:fromDegrees="0"
-        android:toDegrees="360"
-        android:pivotX="50%"
-        android:pivotY="50%" >
-        <animateRotate
-            android:duration="1000"
-            android:fromDegrees="0"
-            android:interpolator="@android:anim/linear_interpolator"
-            android:repeatCount="infinite"
-            android:toDegrees="360" />
-    </rotate>
-</shape>
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="1000"
+    android:fromDegrees="0"
+    android:interpolator="@android:anim/linear_interpolator"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    android:repeatCount="infinite"
+    android:toDegrees="360" >
+
+    <shape
+        android:innerRadiusRatio="3"
+        android:shape="ring"
+        android:thicknessRatio="7"
+        android:useLevel="false">
+
+        <gradient
+            android:centerColor="@color/yellow"
+            android:endColor="@android:color/transparent"
+            android:startColor="@color/yellow"
+            android:type="sweep" />
+    </shape>
+</rotate>

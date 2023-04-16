@@ -27,6 +27,7 @@ public class MainPageActivity extends AppCompatActivity implements LocationAdapt
     private RecyclerView vertical_recycler_view;
     private LocationAdapter locationAdapter;
     private CharacterAdapter characterAdapter;
+    private ProgressBar progressBar;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +38,9 @@ public class MainPageActivity extends AppCompatActivity implements LocationAdapt
         }
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recycler_view = findViewById(R.id.recycler_view);
-
+        progressBar = findViewById(R.id.progressBar);
         recycler_view.setLayoutManager(layoutManager);
-
-        locationAdapter = new LocationAdapter(this,this);
+        locationAdapter = new LocationAdapter(this,this, progressBar);
         recycler_view.setAdapter(locationAdapter);
 
         recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {

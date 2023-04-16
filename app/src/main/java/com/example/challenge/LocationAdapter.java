@@ -3,10 +3,12 @@ package com.example.challenge;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -32,6 +34,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
     private LocationAdapterListener listener;
     private int currentPage = 1;
     private int totalPages = 1;
+    private ProgressBar progressBar;
 
     public int getCurrentPage() {
         return currentPage;
@@ -46,14 +49,16 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             currentPage++;
             new GetLocationsTask().execute(currentPage);
         }
+
     }
     public interface LocationAdapterListener {
         void onLocationSelected(Location location);
 
     }
 
-    public LocationAdapter(Context context, LocationAdapterListener listener) {
+    public LocationAdapter(Context context, LocationAdapterListener listener, ProgressBar progressBar) {
         this.context = context;
+        this.progressBar=progressBar;
         if (listener == null) {
             throw new IllegalArgumentException("Listener cannot be null");
         }
@@ -129,8 +134,10 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             locationButton = itemView.findViewById(R.id.location_button);
         }
     }
+
     @SuppressLint("StaticFieldLeak")
     private class GetLocationsTask extends AsyncTask<Integer, Void, List<Location>> {
+
         @Override
         protected List<Location> doInBackground(Integer... integers) {
             HttpURLConnection conn = null;
@@ -173,6 +180,18 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             }
             locations.addAll(locationNames);
             notifyDataSetChanged();
+            progressBar.setVisibility(View.VISIBLE);
+            if (currentPage == totalPages) {
+                progressBar.setVisibility(View.GONE);
+            }
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                        progressBar.setVisibility(View.GONE);
+
+                }
+            }, 1000);
+
             for (Location location : locationNames) {
                 if (location.locationName.equals("Earth (C-137)")) {
                     listener.onLocationSelected(location);
@@ -206,6 +225,5 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             }
             return locations;
         }
-
     }
 }
