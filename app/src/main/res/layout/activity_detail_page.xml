@@ -23,21 +23,11 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/avenir"
                 android:text="Character Name"
-                android:textSize="22sp"
+                android:textSize="26sp"
                 android:textStyle="bold" />
 
         </androidx.appcompat.widget.Toolbar>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
-
-            <!-- Character name -->
-
-
-            <!-- Character image -->
             <ImageView
                 android:id="@+id/character_image"
                 android:layout_width="275dp"
@@ -60,6 +50,8 @@
                     android:id="@+id/character_status_label"
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="5dp"
                     android:fontFamily="@font/avenir"
                     android:text="Status: "
                     android:textSize="22sp"
@@ -71,23 +63,26 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/avenir"
                     android:textSize="22sp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="5dp"/>
             </LinearLayout>
 
             <!-- Species -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/character_species_label"
-                    android:layout_width="113dp"
+                    android:layout_width="110dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="5dp"
                     android:fontFamily="@font/avenir"
-                    android:text="Species: "
+                    android:text="Specy: "
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
@@ -97,14 +92,15 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/avenir"
                     android:textSize="22sp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="5dp"/>
             </LinearLayout>
 
             <!-- Gender -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -115,7 +111,9 @@
                     android:fontFamily="@font/avenir"
                     android:text="Gender: "
                     android:textSize="22sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="5dp"/>
 
                 <TextView
                     android:id="@+id/character_gender"
@@ -123,14 +121,15 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/avenir"
                     android:textSize="22sp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="5dp"/>
             </LinearLayout>
 
             <!-- Origin -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -141,7 +140,9 @@
                     android:fontFamily="@font/avenir"
                     android:text="Origin: "
                     android:textSize="22sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="5dp"/>
 
                 <TextView
                     android:id="@+id/character_origin"
@@ -149,14 +150,15 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/avenir"
                     android:textSize="22sp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="5dp"/>
             </LinearLayout>
 
             <!-- Location -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -167,14 +169,18 @@
                     android:fontFamily="@font/avenir"
                     android:text="Location: "
                     android:textSize="22sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="5dp"/>
                 <TextView
                     android:id="@+id/location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/avenir"
                     android:textSize="22sp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="5dp"/>
 
             </LinearLayout>
 
@@ -182,7 +188,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -193,14 +198,18 @@
                     android:fontFamily="@font/avenir"
                     android:text="Episodes: "
                     android:textSize="22sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="5dp"/>
                 <TextView
                     android:id="@+id/episodes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/avenir"
                     android:textSize="22sp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="5dp"/>
 
             </LinearLayout>
 
@@ -208,45 +217,30 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:layout_marginBottom="20dp">
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/created_species_label"
-                        android:layout_width="110dp"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/avenir"
-                        android:text="Created at "
-                        android:textSize="22sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/at_api_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/created_species_label"
-                        android:layout_marginLeft="8dp"
-                        android:fontFamily="@font/avenir"
-                        android:text="(in API):"
-                        android:textSize="22sp"
-                        android:textStyle="bold" />
-                </RelativeLayout>
+                <TextView
+                    android:id="@+id/created_species_label"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="5dp"
+                    android:fontFamily="@font/avenir"
+                    android:text="Created at\n(in API): "
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/createdAt"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="end"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="5dp"
                     android:fontFamily="@font/avenir"
                     android:textSize="22sp"
                     android:textStyle="normal" />
 
             </LinearLayout>
-
-
         </LinearLayout>
-    </LinearLayout>
 </ScrollView>
